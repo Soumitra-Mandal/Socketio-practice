@@ -13,9 +13,82 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
+
+      /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 15px;
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 33px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#nick {
+  width: 80%;
+  border-radius: 5px;
+  height: 25px;
+}
+
+#name-button{
+  height: 28px;
+  width: 12%;
+  background-color: #4b18e4;
+  color: white;
+  text-align: center;
+  margin: 3px;
+  padding: 4px 8px 0px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#flex{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
     </style>
   </head>
   <body>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Enter Name:</h3>
+        <div id="flex">
+          <input id="nick" autocomplete="off">
+          <div id="name-button" onclick="handleName()">Enter</div>
+        </div>
+      </div>
+    </div>
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
@@ -24,10 +97,17 @@
 
     <script>
       var socket = io();
-
+      const log = console.log
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
       var input = document.getElementById('input');
+      var nameButton = document.getElementById('name-button');
+      var modal = document.getElementById("myModal");
+      var body = document.getElementsByTagName('body')[0];
+      var span = document.getElementsByClassName("close")[0];
+      var nickName = document.getElementById('nick');
+      let name;
+
       function makeid(length) {
           var result = '';
           var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -37,7 +117,12 @@
           }
           return result;
       }
-      const name = makeid(5);
+
+      function handleName() {
+        name = nickName.value.length > 0 ? nickName.value : makeid(5);
+        modal.style.display = "none";
+      }
+
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
@@ -57,6 +142,21 @@
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
+
+      body.onload = function() {
+        modal.style.display = "block";
+      }
+
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          log(nickName);
+          modal.style.display = "none";
+        }
+      }
     </script>
   </body>
 </html>
