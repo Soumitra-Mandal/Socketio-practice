@@ -123,6 +123,12 @@
         modal.style.display = "none";
       }
 
+      nickName.addEventListener("keypress", function(e) {
+        if(e.key === "Enter") {
+          nameButton.click();
+        }
+      })
+
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
