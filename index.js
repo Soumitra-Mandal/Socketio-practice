@@ -20,6 +20,10 @@ io.on("connection", (socket) => {
   socket.on("typing", (name) => {
     socket.broadcast.emit("typing", name);
   });
+
+  socket.on("conn", (name) => {
+    socket.broadcast.emit("conn", name);
+  });
 });
 
 http.listen(port, () => {

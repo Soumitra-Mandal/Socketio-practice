@@ -9,6 +9,7 @@ var body = document.getElementsByTagName("body")[0];
 var span = document.getElementsByClassName("close")[0];
 var nickName = document.getElementById("nick");
 var typing = document.getElementById("typing");
+var connection = document.getElementById("connection");
 let name;
 
 function makeid(length) {
@@ -24,6 +25,7 @@ function makeid(length) {
 function handleName() {
   name = nickName.value.length > 0 ? nickName.value : makeid(5);
   modal.style.display = "none";
+  socket.emit("conn", name);
 }
 
 nickName.addEventListener("keypress", function (e) {
@@ -59,11 +61,14 @@ body.onload = function () {
 span.onclick = function () {
   name = makeid(5);
   modal.style.display = "none";
+  socket.emit("conn", name);
 };
 
 window.onclick = function (event) {
   if (event.target == modal) {
+    name = makeid(5);
     modal.style.display = "none";
+    socket.emit("conn", name);
   }
 };
 
@@ -76,4 +81,8 @@ socket.on("typing", function (name) {
   setTimeout(() => {
     typing.textContent = "";
   }, 1000);
+});
+
+socket.on("conn", function (name) {
+  connection.textContent = name + " is connected!";
 });
