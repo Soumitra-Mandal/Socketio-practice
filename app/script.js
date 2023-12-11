@@ -10,7 +10,7 @@ var span = document.getElementsByClassName("close")[0];
 var nickName = document.getElementById("nick");
 var typing = document.getElementById("typing");
 var connection = document.getElementById("connection");
-let name;
+let userName;
 
 function makeid(length) {
   var result = "";
@@ -23,9 +23,9 @@ function makeid(length) {
 }
 
 function handleName() {
-  name = nickName.value.length > 0 ? nickName.value : makeid(5);
+  userName = nickName.value.length > 0 ? nickName.value : makeid(5);
   modal.style.display = "none";
-  socket.emit("conn", name);
+  socket.emit("conn", userName);
 }
 
 nickName.addEventListener("keypress", function (e) {
@@ -37,7 +37,7 @@ nickName.addEventListener("keypress", function (e) {
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   if (input.value) {
-    var msg = name + ": " + input.value;
+    var msg = userName + ": " + input.value;
     socket.emit("chat message", msg);
     var item = document.createElement("li");
     item.textContent = msg;
@@ -59,21 +59,21 @@ body.onload = function () {
 };
 
 span.onclick = function () {
-  name = makeid(5);
+  userName = makeid(5);
   modal.style.display = "none";
-  socket.emit("conn", name);
+  socket.emit("conn", userName);
 };
 
 window.onclick = function (event) {
   if (event.target == modal) {
-    name = makeid(5);
+    userName = makeid(5);
     modal.style.display = "none";
-    socket.emit("conn", name);
+    socket.emit("conn", userName);
   }
 };
 
 input.addEventListener("keypress", function (e) {
-  socket.emit("typing", name);
+  socket.emit("typing", userName);
 });
 
 socket.on("typing", function (name) {
